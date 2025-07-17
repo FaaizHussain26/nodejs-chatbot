@@ -14,15 +14,19 @@ const openai = new OpenAI({
   apiKey: process.env.OPEN_API_KEY,
 });
 
+const trimMessages = (messages: ChatCompletionMessageParam[]) => {
+  return messages.slice(Math.max(messages.length - 10, 0));
+};
+
 export const getChatResponse = async (
   messages: ChatCompletionMessageParam[],
   req: Request
 ): Promise<ChatResponse> => {
   const completion = await openai.chat.completions.create({
-    model: "gpt-4",
-    messages: messages,
-    temperature: 1,
-    max_tokens: 2048,
+    model: "gpt-3.5-turbo",
+    messages: trimMessages(messages),
+    temperature: 0.7,
+    max_tokens: 512,
     top_p: 1,
   });
 
