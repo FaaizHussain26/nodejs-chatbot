@@ -3,17 +3,13 @@ import express from "express";
 
 import cors from "cors";
 import * as dotenv from "dotenv";
-import chatRouter from "./routes/chat.route";
 import rateLimit from "express-rate-limit";
-import connectDB from "./database";
-import userRouter from "./routes/user.route";
+import chatRouter from "./routes/chat.route";
 
 dotenv.config();
 const port = process.env.PORT || 5000;
 
 const app = express();
-
-connectDB();
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
@@ -38,8 +34,6 @@ const options = [
 app.use(options);
 
 app.use("/api/chat", chatRouter);
-
-app.use("/api/users", userRouter);
 
 app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
