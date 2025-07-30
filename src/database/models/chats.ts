@@ -9,10 +9,6 @@ const chatSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  user: {
-    type: String,
-    required: true,
-  },
   choices: {
     type: Array,
     required: false,

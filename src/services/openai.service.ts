@@ -2,6 +2,8 @@ import { ChatCompletionMessageParam } from "openai/resources/chat";
 import { Request } from "express";
 import openai from "../config/openai";
 import { pineconeIndex, pineconeShopIndex } from "../config/pinecone";
+import Chat from "../database/models/chats";
+import { saveChatMessage } from "./chat.service";
 
 export interface ChatResponse {
   role: "assistant";
@@ -84,6 +86,12 @@ ${blogContext || "No blog posts found."}
   });
 
   const assistantMessage = completion.choices[0].message.content || "";
+
+  await saveChatMessage(
+    completion.id,
+    req.ip as string,
+    messages
+  );
 
   return {
     role: "assistant",

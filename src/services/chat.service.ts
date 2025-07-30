@@ -3,7 +3,6 @@ import Chat from "../database/models/chats";
 const saveChatMessage = async (
   conversationId: string,
   ip: string | string[],
-  user: string,
   choices: object
 ) => {
   try {
@@ -12,7 +11,6 @@ const saveChatMessage = async (
     if (!chat) {
       chat = new Chat({
         ip: ip,
-        user: user,
         chatId: conversationId,
         choices: choices,
       });
