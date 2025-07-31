@@ -3,7 +3,7 @@ import { Request } from "express";
 import openai from "../config/openai";
 import { pineconeIndex, pineconeShopIndex } from "../config/pinecone";
 import Chat from "../database/models/chats";
-import { saveChatMessage } from "./chat.service";
+import { Message, saveChatMessage } from "./chat.service";
 
 export interface ChatResponse {
   role: "assistant";
@@ -85,17 +85,24 @@ ${blogContext || "No blog posts found."}
     top_p: 1,
   });
 
-  const assistantMessage = completion.choices[0].message.content || "";
+  const assistantMessageContent = completion.choices[0].message.content || "";
 
-  await saveChatMessage(
-    completion.id,
-    req.ip as string,
-    messages
-  );
+  const choice: Message[] = [
+    {
+      role: "assistant",
+      content: assistantMessageContent,
+    },
+    {
+      role: "user",
+      content: lastUserMessage as string,
+    }
+  ]
+
+  await saveChatMessage(completion.id, req.ip as string, choice);
 
   return {
     role: "assistant",
-    content: assistantMessage,
+    content: assistantMessageContent,
     id: completion.id,
   };
 };
