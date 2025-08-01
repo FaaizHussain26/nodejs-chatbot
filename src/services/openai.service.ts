@@ -4,6 +4,7 @@ import openai from "../config/openai";
 import { pineconeIndex, pineconeShopIndex } from "../config/pinecone";
 import Chat from "../database/models/chats";
 import { Message, saveChatMessage } from "./chat.service";
+import getPrompts from "../constant/prompts";
 
 export interface ChatResponse {
   role: "assistant";
@@ -56,19 +57,8 @@ export const getChatResponse = async (
     getRelevantContext(lastUserMessage as string, pineconeShopIndex, true)
   ]);
 
-  const systemPrompt = `
-You are a helpful assistant for Easy DIY Murphy Bed customers.  
-
-Responsibilities:
-1. If the question is about Murphy bed kits, installation, sizes, tools, warranty, guides, etc., use the following product information:
-${productContext || "No product information available."}
-
-2. For general queries (like FAQs or DIY tips), use the following blog information:
-${blogContext || "No blog posts found."}
-
-3. If the question doesn't fit either, respond briefly and direct the user to: https://www.easydiymurphybed.com/contact-us/
-  `.trim();
-
+  const systemPrompt = getPrompts(productContext, blogContext);
+  
   const fullMessages: ChatCompletionMessageParam[] = [
     {
       role: "system",
