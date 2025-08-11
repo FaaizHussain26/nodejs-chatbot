@@ -45,7 +45,7 @@ Return Policy:
 - Full policy: https://www.easydiymurphybed.com/return-policy/
 
 International Shipping:
-- Only to U.S. & Canada; others must contact support
+- Only to U.S. & Canada; others must contact support Or visit https://www.easydiymurphybed.com/shipping-destinations-and-rates/
 `;
 
 const getPrompts = (productContext: string, blogContext: string) => {
